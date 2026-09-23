@@ -109,8 +109,10 @@
         '<span class="pack-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg></span></div>' +
         '<p class="pack-desc">' + p.deskripsi + '</p>' +
         '<div class="pack-meta"><span class="tag tag-hl">' + p.jumlah + ' soal</span>' +
-        '<span class="tag">' + p.judul + '</span></div>' +
-        '</button>';
+        (p.kunci === 'analisis'
+          ? '<span class="tag tag-warn">kunci belum terverifikasi</span>'
+          : '<span class="tag">' + p.judul + '</span>') +
+        '</div></button>';
     }).join('');
     $$('.pack').forEach(function (el) {
       el.addEventListener('click', function () {
@@ -126,7 +128,13 @@
   }
 
   function syncConfig() {
-    var p = pack(cfg.packet), n = effectiveCount();
+    var p = pack(cfg.packet);
+    // jumlah soal terpilih melebihi isi paket -> turunkan ke opsi valid terbesar
+    if (cfg.count !== 'all' && cfg.count > p.jumlah) {
+      var opsi = [20, 50, 100].filter(function (v) { return v <= p.jumlah; });
+      cfg.count = opsi.length ? opsi[opsi.length - 1] : 'all';
+    }
+    var n = effectiveCount();
     $$('.seg-item[data-mode]').forEach(function (b) {
       var on = b.dataset.mode === cfg.mode;
       b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on);
@@ -150,6 +158,15 @@
       '<b>' + n + '</b> soal · <b>' + cfg.minutes + '</b> menit · mode <b>' +
       (cfg.mode === 'ujian' ? 'Ujian' : 'Latihan') + '</b>' +
       (cfg.mode === 'latihan' ? ' <span style="opacity:.75">(kunci langsung tampil)</span>' : '');
+
+    var note = $('#unverifiedNote');
+    if (p.kunci === 'analisis') {
+      note.hidden = false;
+      note.querySelector('p').innerHTML =
+        '<b>' + p.nama + '</b> berasal dari arsip soal yang tidak menyertakan kunci jawaban. ' +
+        'Kunci pada paket ini disusun lewat penalaran, <b>bukan kunci resmi</b>, dan sebagian masih bisa diperdebatkan. ' +
+        'Cocokkan dengan buku atau dosen Anda sebelum dijadikan patokan.';
+    } else { note.hidden = true; }
 
     store(LS_CONFIG, cfg);
   }
@@ -190,13 +207,14 @@
         q: src.q,
         o: order.map(function (k) { return src.o[k]; }),
         a: order.indexOf(src.a),
+        c: src.c || null,
         pick: null,
         flag: false
       };
     });
 
     return {
-      packet: p.id, packetName: p.nama, packetTitle: p.judul,
+      packet: p.id, packetName: p.nama, packetTitle: p.judul, kunci: p.kunci || 'resmi',
       mode: cfg.mode, items: items, cur: 0,
       total: items.length,
       limit: cfg.minutes * 60,
@@ -320,7 +338,8 @@
       ex.hidden = false;
       ex.classList.toggle('is-ok', benar);
       $('#explainText').innerHTML =
-        '<span class="ex-row ex-key"><em>Kunci</em><b>' + KEYS[it.a] + '. ' + escapeHtml(it.o[it.a]) + '</b></span>' +
+        '<span class="ex-row ex-key"><em>Kunci</em><span><b>' + KEYS[it.a] + '. ' + escapeHtml(it.o[it.a]) + '</b>' +
+          (it.c ? ' <span class="ex-conf c-' + it.c + '">keyakinan ' + it.c + '</span>' : '') + '</span></span>' +
         (benar
           ? '<span class="ex-note">Jawaban Anda sudah tepat.</span>'
           : '<span class="ex-row ex-mine"><em>Jawaban Anda</em><b>' + KEYS[it.pick] + '. ' + escapeHtml(it.o[it.pick]) + '</b></span>');

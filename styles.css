@@ -176,6 +176,8 @@ html[data-theme="light"] .ic-moon{display:block}
 
 /* package cards */
 .pack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (min-width:861px){.pack-grid > .pack:nth-child(4):nth-last-child(2),
+.pack-grid > .pack:nth-child(5):nth-last-child(1){grid-column:span 1}}
 .pack{
   position:relative;text-align:left;padding:22px;border-radius:var(--r-lg);
   background:var(--surface);border:1px solid var(--line);backdrop-filter:blur(16px);
@@ -205,6 +207,24 @@ html[data-theme="light"] .ic-moon{display:block}
   background:var(--surface-2);border:1px solid var(--line);color:var(--muted);
 }
 .tag-hl{color:var(--brand-3);border-color:rgba(34,211,238,.26);background:rgba(34,211,238,.10)}
+.tag-warn{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 30%,transparent);background:var(--warn-soft)}
+
+/* catatan kunci belum terverifikasi */
+.unverified{
+  display:flex;gap:11px;align-items:flex-start;margin-top:14px;padding:13px 15px;
+  border-radius:var(--r-md);background:var(--warn-soft);
+  border:1px solid color-mix(in srgb,var(--warn) 26%,transparent);
+}
+.unverified svg{width:17px;height:17px;flex:none;color:var(--warn);margin-top:1px}
+.unverified p{font-size:12.6px;line-height:1.62;color:var(--muted)}
+.unverified b{color:var(--text);font-weight:700}
+.ex-conf{
+  display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:2px 8px;border-radius:6px;
+  font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle;
+}
+.ex-conf.c-tinggi{color:var(--ok);background:var(--ok-soft)}
+.ex-conf.c-sedang{color:var(--warn);background:var(--warn-soft)}
+.ex-conf.c-rendah{color:var(--bad);background:var(--bad-soft)}
 
 /* config */
 .config{
@@ -409,6 +429,7 @@ html[data-theme="light"] .opt-key{background:rgba(17,24,45,.05)}
 }
 .ex-row b{font-weight:700;color:var(--text)}
 .ex-key b{color:var(--ok)}
+.ex-row > span{min-width:0}
 .ex-mine b{color:var(--bad)}
 .ex-note{font-size:13.6px;line-height:1.65;color:var(--muted)}
 
