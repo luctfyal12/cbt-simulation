@@ -82,6 +82,10 @@ Folder sumber Paket 5 tidak menyertakan kunci jawaban sama sekali. Kunci pada pa
   di beranda ketika paket itu dipilih.
 - Setiap soal membawa tingkat keyakinan (`tinggi` / `sedang` / `rendah`) yang ditampilkan
   sebagai badge di panel Kunci Jawaban.
+- Setiap soal juga disertai blok **Mengapa** yang menguraikan dasar penalaran kuncinya —
+  prinsip atau standar yang dipakai, dan pada soal berkeyakinan rendah, alasan mengapa
+  opsi lain masih mungkin benar. Blok ini diberi catatan bahwa isinya penalaran sendiri,
+  bukan kutipan kunci resmi, supaya mudah diadu dengan sumber Anda.
 - Enam soal berkeyakinan **rendah** dan paling perlu diverifikasi: **no. 10, 13, 14, 17, 40, 45**
   (penomoran mengikuti nomor asli pada gambar, bukan urutan di aplikasi).
 
@@ -101,6 +105,7 @@ window.BANK_SOAL = [
       { q: "teks soal", o: ["opsi A","opsi B","opsi C","opsi D","opsi E"], a: 2 }
       //  a = indeks jawaban benar (0 = opsi pertama)
       //  c = "tinggi" | "sedang" | "rendah"  (opsional, badge tingkat keyakinan)
+      //  p = "teks pembahasan"                (opsional, blok "Mengapa")
     ]
   }
 ];

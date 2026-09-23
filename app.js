@@ -208,6 +208,7 @@
         o: order.map(function (k) { return src.o[k]; }),
         a: order.indexOf(src.a),
         c: src.c || null,
+        p: src.p || null,
         pick: null,
         flag: false
       };
@@ -342,7 +343,11 @@
           (it.c ? ' <span class="ex-conf c-' + it.c + '">keyakinan ' + it.c + '</span>' : '') + '</span></span>' +
         (benar
           ? '<span class="ex-note">Jawaban Anda sudah tepat.</span>'
-          : '<span class="ex-row ex-mine"><em>Jawaban Anda</em><b>' + KEYS[it.pick] + '. ' + escapeHtml(it.o[it.pick]) + '</b></span>');
+          : '<span class="ex-row ex-mine"><em>Jawaban Anda</em><b>' + KEYS[it.pick] + '. ' + escapeHtml(it.o[it.pick]) + '</b></span>') +
+        (it.p
+          ? '<span class="ex-why"><em>Mengapa</em><span>' + escapeHtml(it.p) +
+            '<i class="ex-src">Penalaran ini disusun sendiri, bukan kutipan kunci resmi.</i></span></span>'
+          : '');
     } else { ex.hidden = true; }
 
     $('#prevBtn').disabled = S.cur === 0;
